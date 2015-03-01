@@ -1,0 +1,11 @@
+{
+  "name": "fish-feeding",
+  "version": "0.1.0",
+  "description": "Feed the fish in aquarium using Arduino",
+  "dependencies": {
+    "johnny-five": "^0.8.44",
+    "express": "*",
+    "socket.io": "*",
+    "socket.io-client": "*"
+  }
+}
