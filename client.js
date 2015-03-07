@@ -2,10 +2,11 @@
  * copyright (c) 2015, Asep Bagja Priandana
  * This is file for handling the client side of fish feeding system.
  */
-var socket = require('socket.io-client')('http://localhost:3000');
+var socket = require('socket.io-client')('http://tanibox.com:5001');
 var five = require('johnny-five');
 
-var board = new five.Board();
+
+/*var board = new five.Board();
 
 // preparing the board for working
 board.on('ready', function() {
@@ -30,4 +31,4 @@ board.on('ready', function() {
       socket.emit('feedback', {message: "from fish: nom nom nom...thank you!"});
     }); 
   });
-});
+});*/
