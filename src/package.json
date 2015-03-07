@@ -6,6 +6,7 @@
     "johnny-five": "^0.8.44",
     "express": "*",
     "socket.io": "*",
-    "socket.io-client": "*"
+    "socket.io-client": "*",
+    "serialport": "*"
   }
 }

@@ -2,10 +2,21 @@
  * copyright (c) 2015, Asep Bagja Priandana
  * This is file for handling the client side of fish feeding system.
  */
-var socket = require('socket.io-client')('http://localhost:3000');
+var socket = require('socket.io-client')('http://128.199.111.65:5001');
+var serialport = require('serialport');
+var SerialPort = serialport.SerialPort;
 var five = require('johnny-five');
 
-var board = new five.Board();
+var board = new five.Board({
+  port: new SerialPort("/dev/ttyACM0", {
+    baudrate: 9600,
+    dataBits: 8,
+    parity: 'none',
+    stopBits: 1,
+    parser: serialport.parsers.readline("\n"),
+    flowControl: false
+  })
+});
 
 // preparing the board for working
 board.on('ready', function() {
