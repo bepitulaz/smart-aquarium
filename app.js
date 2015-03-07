@@ -9,6 +9,7 @@ var routes = require('./routes')(io);
 
 app.get('/', routes.index);
 
+// get feedback from aquarium
 io.on('connection', function(socket) {
   console.log('an aquarium is connected'); 
 

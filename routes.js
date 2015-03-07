@@ -7,7 +7,7 @@ module.exports = function(io) {
 
   routes.index = function(req, res) {
     io.emit('feeding', {message: "your food is coming"});
-    res.send('Feed my fish now!');
+    res.send('Feed my fish now!'); 
   };
 
   return routes;
