@@ -2,33 +2,59 @@
  * copyright (c) 2015, Asep Bagja Priandana
  * This is file for handling the client side of fish feeding system.
  */
-var socket = require('socket.io-client')('http://tanibox.com:5001');
-var five = require('johnny-five');
+var config = require('./config');
+var socket = require('socket.io-client')(config.serverName);
+var firmata = require('firmata');
 
+var board = new firmata.Board(config.pathToUsb);
 
-/*var board = new five.Board();
+/**
+ * Function for feeding the fish.
+ *
+ * degrees {int} - the degree of the servo
+ * incrementer {int} - to stepping up the servo
+ */
+function feedingTheFish(degrees, incrementer) {
+  if (degrees >= 180 || degrees === 0) {
+    incrementer *= -1;
+  }
+  degrees += incrementer;
+  board.servoWrite(9, degrees);
 
-// preparing the board for working
+  console.log(degrees);
+}
+
+/**
+ * Stop feeding the fish
+ *
+ * intervalId {object} - the interval to be killed
+ * board {object} - the arduino
+ */
+function stopFeeding(intervalId, board) {
+  clearInterval(intervalId);
+  board.servoWrite(9, 0);
+}
+
 board.on('ready', function() {
-  var servo = new five.Servo(9);
-
-  // Connect to the websocket server
+  board.servoConfig(9, 1000, 2000);
+  board.servoWrite(9, 0);
+  
+  // connect to the websocket server
   socket.on('connect', function() {
-    console.log('connecting to server');
+    console.log('connecting to the server');
   });
 
-  // Wait to the server to get feeding instruction.
+  // wait to the server to get feeding instruction
   socket.on('feeding', function(data) {
-    // message from human
     console.log("from human: " + data.message);
+
+    var degrees = 10;
+    var incrementer = 10;
     
-    // feed it now for 10 s
-    servo.sweep();
-    board.wait(10000, function() {
-      servo.stop();
-      servo.center();
+    board.pinMode(9, board.MODES.SERVO);
+    board.servoWrite(9, 0);
     
-      socket.emit('feedback', {message: "from fish: nom nom nom...thank you!"});
-    }); 
+    // start feeding
+    var feedingProgress = setInterval(feedingTheFish(degrees, incrementer), 500);
   });
-});*/
+});
