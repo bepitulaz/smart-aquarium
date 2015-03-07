@@ -1,13 +1,18 @@
 FROM ubuntu:14.04
 
+MAINTAINER Asep Bagja Priandana <bepitulaz@gmail.com>
+
 RUN apt-get update
 
 RUN apt-get install -y nodejs npm
 
-ADD start.sh /tmp/
+COPY . /src
 
-RUN chmod +x /tmp/start.sh
+RUN cd /src
 
-EXPOSE 8080
+RUN npm cache clean
 
-CMD ./tmp/start.sh
+RUN npm install
+
+EXPOSE 3000
+CMD["node", "/src/index.js"]
