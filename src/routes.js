@@ -7,6 +7,15 @@ module.exports = function(io) {
 
   routes.index = function(req, res) {
     io.emit('feeding', {message: "your food is coming"});
+    
+    io.on('progress', function(data) {
+      res.json(data.message);
+    });
+
+    io.on('done', function(data) {
+      res.json(data.message);
+    });
+
     res.send('Feed my fish now!'); 
   };
 
