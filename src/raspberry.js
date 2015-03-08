@@ -9,19 +9,19 @@ var socket = require('socket.io-client')(config.serverName);
 var five = require('johnny-five');
 
 var board = new five.Board({
-  port: new SerialPort(config.pathToUsb, {
-    parser: serialport.parsers.readline("\r"),
-    baudrate: 115200
-  })
+  port: config.pathToUsb
 });
 
 board.on('ready', function() {
   console.log("ready!");
   
-  this.repl.inject({  
-    servo: new five.Servo({
-      pin: 9,
-      center: true
-    })
+  var Servo = new five.Servo({
+    pin: 10,
+    range: [45, 135]
   });
+
+  this.repl.inject({  
+    servo: Servo 
+  });
+
 });
