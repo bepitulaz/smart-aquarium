@@ -6,22 +6,28 @@ var config = require('./config');
 var serialport = require('serialport');
 var SerialPort = serialport.SerialPort;
 var socket = require('socket.io-client')(config.serverName);
-var five = require('johnny-five');
 
-var board = new five.Board({
-  port: new SerialPort(config.pathToUsb, {
-    parser: serialport.parsers.readline("\r"),
-    baudrate: 115200
-  })
+var serial = new SerialPort(config.pathToUsb, {
+  parser: serialport.parsers.readline("\n"),
+  baudrate: 9600
 });
 
-board.on('ready', function() {
-  console.log("ready!");
-  
-  this.repl.inject({  
-    servo: new five.Servo({
-      pin: 9,
-      center: true
-    })
-  });
+serial.open(function(error) {
+  if(error) {
+    console.log('failed to open: ' + error);
+  } else {
+    console.log('open connection');
+    
+    setTimeout(function() {
+    serial.write("feed\n", function(error, result) {
+      serial.drain(function() {
+        console.log(result);
+      });
+    });
+    }, 10000);
+
+    serial.on('data', function(data) {
+      console.log('message from aquarium: ' + data);
+    }); 
+  }
 });
